@@ -69,6 +69,7 @@ function GetSigFiles(inputFile, SigArray) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             console.log("##[debug]GetSigFiles()::" + inputFile);
+            tl.checkPath(inputFile, inputFile);
             return [2 /*return*/, new Promise(function (resolve, reject) {
                     var fetchData = [];
                     fs.createReadStream(inputFile, { highWaterMark: sigSize })
@@ -82,19 +83,6 @@ function GetSigFiles(inputFile, SigArray) {
                 })];
         });
     });
-}
-function difference(a1, a2) {
-    var a = [], diff = [];
-    for (var i = 0; i < a1.length; i++)
-        a[a1[i]] = a1[i];
-    for (var i = 0; i < a2.length; i++)
-        if (a[a2[i]])
-            delete a[a2[i]];
-        else
-            a[a2[i]] = a2[i];
-    for (var k in a)
-        diff.push(a[k]);
-    return diff;
 }
 function intersect(a, b) {
     var ai = 0, bi = 0;
@@ -132,11 +120,17 @@ function precise(x, precision) {
 // Start function
 function run() {
     return __awaiter(this, void 0, void 0, function () {
-        var f1_size, f2_size, inter, inter_arr_debug, inter_arr_command, inter_length, diff, diff_arr_debug, diff_length, DifferencePercent, IntersectionPercent, err_1;
+        var sigbench_logo, f1_size, f2_size, inter, inter_length, diff, diff_length, DifferencePercent, IntersectionPercent, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 3, , 4]);
+                    sigbench_logo = "\n         o     |                   |    \n    ,---..,---.|---.,---.,---.,---.|---.\n    `---.||   ||   ||---'|   ||    |   |\n    `---'``---|`---'`---'`   '`---'`   '\n          `---'                         \n    ";
+                    console.log(sigbench_logo);
+                    if (sigSize <= 8) {
+                        // tl.setResult(tl.TaskResult.Cancelled, 'Signature size can\'t be smaller than 8!');
+                        tl.error('Signature size can\'t be smaller than 8! Current Signature size ' + sigSize);
+                    }
                     return [4 /*yield*/, GetSigFiles(file1, f1)];
                 case 1:
                     _a.sent();
@@ -155,31 +149,32 @@ function run() {
                     console.log('##[debug]Total Size: ', formatBytes(f1_size + f2_size));
                     console.log('##[endgroup]');
                     inter = intersect(f1, f2);
-                    inter_arr_debug = inter.map(function (i) { return '##[debug]' + i; });
-                    console.log('##[group]Found Signtures (inter). (debug only)');
-                    console.log(inter_arr_debug);
-                    console.log('##[endgroup]');
+                    /* console.log('##[group]Found Signtures (inter). (debug only)');
+                    console.log(inter);
+                    console.log('##[endgroup]'); */
                     if (print_matched) {
-                        console.log('##[command]Signature Benchmark | Matched signatures: ');
-                        inter_arr_command = inter.map(function (i) { return '##[command]' + i; });
-                        console.log(inter_arr_command);
+                        console.log('##[group]Signature Benchmark | Matched signatures');
+                        console.dir(inter, { 'maxArrayLength': null });
+                        console.log('##[endgroup]');
                     }
                     else {
-                        console.log('##[debug]Print Intersection set to false');
+                        console.log('##[debug]Print Matched set to false');
                     }
                     inter_length = inter.length;
-                    console.log('##[debug]Found Signtures Num (inter length): ', inter_length);
-                    diff = difference(f1, f2);
-                    diff_arr_debug = diff.map(function (i) { return '##[debug]' + i; });
-                    console.log('##[group]Found Signtures (diff). (debug only)');
-                    console.log(diff_arr_debug);
-                    console.log('##[endgroup]');
+                    console.log('##[debug]Intersection Signatures Length: ', inter_length);
+                    diff = f1.filter(function (x) {
+                        // checking second array does not contain element "x"
+                        if (f2.indexOf(x) == -1)
+                            return true;
+                        else
+                            return false;
+                    });
                     diff_length = diff.length;
-                    console.log('##[debug]Found Signtures Num (diff length): ', diff_length);
-                    DifferencePercent = 100 - diff_length / f2.length;
-                    console.log('##[command]Difference Percent: ', DifferencePercent + '%');
-                    IntersectionPercent = inter_length / (f2.length + f1.length - inter_length);
-                    console.log('##[command]Intersection Percent: ', IntersectionPercent + '%');
+                    console.log('##[debug]Difference Signatures Length: ', diff_length);
+                    DifferencePercent = 100 - ((diff_length / f2.length) * 100);
+                    console.log('##[command]Difference Percent: ', precise(DifferencePercent, percentPrecise) + '%');
+                    IntersectionPercent = (inter_length / (f2.length + f1.length - inter_length)) * 100;
+                    console.log('##[command]Intersection Percent: ', precise(IntersectionPercent, percentPrecise) + '%');
                     if (custom_Var) {
                         tl.setVariable('Sigbench.DiffPercent', precise(DifferencePercent, percentPrecise));
                         tl.setVariable('Sigbench.InterPercent', precise(IntersectionPercent, percentPrecise));

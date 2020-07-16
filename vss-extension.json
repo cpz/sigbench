@@ -2,10 +2,10 @@
     "manifestVersion": 1,
     "id": "sigbench",
     "publisher": "cpz",
-    "version": "1.0.52",
+    "version": "1.0.75",
     "name": "Sigbench",
-    "description": "Azure DevOps Extension to signature benchmark your files.",
-    "public": false,
+    "description": "Test your binary files against signature scans.",
+    "public": true,
     "demands": ["api-version/3.0"],
     "categories": ["Azure Pipelines"],
     "targets": [
@@ -13,9 +13,18 @@
             "id": "Microsoft.VisualStudio.Services"
         }
     ],
-    "icons": {
-        "default": "images/extension-logo.jpg"
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/cpz/sigbench"
     },
+    "icons": {
+        "default": "images/extension-logo-small.png",
+        "large":"images/extension-logo.png"
+    },
+    "branding":{
+        "color":"#FFFFFF",
+        "theme":"light"
+     },
     "content": {
         "details": {
             "path": "README.md"
@@ -39,6 +48,10 @@
     "files": [
         {
             "path": "sb-task",
+            "addressable": true
+        },
+        {
+            "path": "images",
             "addressable": true
         }
     ]

@@ -2,7 +2,7 @@
   "id": "2eadfaf9-a99a-4a51-9815-6935b5aa39fe",
   "name": "sigbench",
   "friendlyName": "Signature Benchmark",
-  "description": "Azure DevOps Extension to signature benchmark your files.",
+  "description": "Test your binary files against signature scans.",
   "author": "Konstantin 'cpz' L.",
   "helpMarkDown": "https://github.com/cpz/sigbench",
   "category": "Utility",
@@ -14,7 +14,7 @@
   "version": {
     "Major": "1",
     "Minor": "0",
-    "Patch": "52"
+    "Patch": "75"
   },
   "minimumAgentVersion": "1.95.0",
   "instanceNameFormat": "Signature Benchmark",
