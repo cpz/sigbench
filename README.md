@@ -1,6 +1,6 @@
 # Signature Benchmark (short: Sigbench)
 
-![Sigbench logo](https://raw.githubusercontent.com/cpz/sigbench/master/images/extension-logo.jpg)
+![Sigbench logo](https://raw.githubusercontent.com/cpz/sigbench/master/images/extension-logo.png)
 
 [Sigbench](https://marketplace.visualstudio.com/items?itemName=cpz.Sigbench "Sigbench on Visual Studio Marketplace") is extension for Azure Pipelines.
 
@@ -28,4 +28,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Idea was taken from [Brendan Heinonen](https://github.com/staticinvocation "Brendan Heinonen") and his project [sigbench](https://github.com/staticinvocation/sigbench "sigbench made by Brendan Heinonen").
 
-![Sigbench logo small](https://raw.githubusercontent.com/cpz/sigbench/master/images/extension-logo-small.ico)
+![Sigbench logo small](https://raw.githubusercontent.com/cpz/sigbench/master/images/extension-logo-small.png)
